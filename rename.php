@@ -1,6 +1,9 @@
 <?php
 
-class ExifRename {
+namespace fejese\ExifRename;
+
+class Renamer
+{
     private $logfileBaseName = 'rename.log';
 
     private static $extensions = array (
@@ -102,7 +105,7 @@ class ExifRename {
     }
 }
 
-$r = new ExifRename();
+$r = new Renamer();
 $r->rename();
 
 ?>
