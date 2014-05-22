@@ -1,7 +1,7 @@
 <?php
 
 class ExifRename {
-    private static $logfile = 'rename.log';
+    private $logfileBaseName = 'rename.log';
 
     private static $extensions = array (
         'jpg',
@@ -90,7 +90,7 @@ class ExifRename {
         $logfile = sprintf(
             '%s/%s_%s.log',
             $this->path,
-            self::$logfile,
+            self::$logfileBaseName,
             date('ymdHis')
         );
         $this->loghandler = fopen($logfile, 'w');
