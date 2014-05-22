@@ -6,7 +6,7 @@ class Renamer
 {
     private $logfileBaseName = 'rename.log';
 
-    private static $extensions = array(
+    private $extensions = array(
         'jpg',
         'jpeg',
         'tif',
@@ -70,7 +70,7 @@ class Renamer
             $extension = strtolower(pathinfo($oldName, PATHINFO_EXTENSION));
 
             try {
-                if (!in_array($extension, self::$extensions)) {
+                if (!in_array($extension, $this->extensions)) {
                     throw new Exception("SKIPPED");
                 }
 
@@ -98,7 +98,7 @@ class Renamer
         $logfile = sprintf(
             '%s/%s_%s.log',
             $this->path,
-            self::$logfileBaseName,
+            $this->logfileBaseName,
             date('ymdHis')
         );
         $this->loghandler = fopen($logfile, 'w');
