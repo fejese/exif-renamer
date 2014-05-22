@@ -6,7 +6,7 @@ class Renamer
 {
     private $logfileBaseName = 'rename.log';
 
-    private static $extensions = array (
+    private static $extensions = array(
         'jpg',
         'jpeg',
         'tif',
@@ -17,7 +17,8 @@ class Renamer
     private $loghandler;
     private $path;
 
-    private function log($oldname = null, $info = null) {
+    private function log($oldname = null, $info = null)
+    {
         ob_start();
         if ($oldname != null) {
             echo "\n$oldname -> ";
@@ -30,7 +31,8 @@ class Renamer
         echo $out;
     }
 
-    private function getNewBaseName ($entry) {
+    private function getNewBaseName ($entry)
+    {
         $exifdata = @exif_read_data($this->path . '/' . $entry);
         if (!empty($exifdata['DateTimeOriginal'])) {
             $date = preg_replace(
@@ -47,7 +49,8 @@ class Renamer
         return $newBaseName;
     }
 
-    private function getNewFinalName($baseName, $ext) {
+    private function getNewFinalName($baseName, $ext)
+    {
         $i=0;
         $newFinalName = $baseName . '.' . $ext;
         while (is_file($this->path . '/' . $newFinalName)) {
@@ -58,7 +61,8 @@ class Renamer
         return $newFinalName;
     }
 
-    public function rename () {
+    public function rename ()
+    {
         $filesToRename = scandir($this->path);
         foreach ($filesToRename as $oldName) {
             $this->log($oldName);
@@ -87,7 +91,8 @@ class Renamer
         }
     }
 
-    public function __construct($path = '.') {
+    public function __construct($path = '.')
+    {
         date_default_timezone_set('Europe/London');
         $this->path = $path;
         $logfile = sprintf(
@@ -98,7 +103,9 @@ class Renamer
         );
         $this->loghandler = fopen($logfile, 'w');
     }
-    public function __destruct() {
+
+    public function __destruct()
+    {
         if ($this->loghandler !== null) {
             fclose($this->loghandler);
         }
