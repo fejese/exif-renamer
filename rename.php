@@ -11,13 +11,6 @@ class ExifRename {
         'avi'
     );
 
-    private static $exceptions = array (
-        '.',
-        '..',
-        '.svn',
-        'rename'
-    );
-
     private $loghandler;
     private $path;
 
@@ -70,7 +63,7 @@ class ExifRename {
             $extension = strtolower(pathinfo($oldName, PATHINFO_EXTENSION));
 
             try {
-                if (!in_array($extension, self::$extensions) || in_array($oldName, self::$exceptions)) {
+                if (!in_array($extension, self::$extensions)) {
                     throw new Exception("SKIPPED");
                 }
 
