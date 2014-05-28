@@ -115,4 +115,3 @@ class Renamer
 $r = new Renamer();
 $r->rename();
 
-?>
