@@ -71,21 +71,21 @@ class Renamer
 
             try {
                 if (!in_array($extension, $this->extensions)) {
-                    throw new Exception("SKIPPED");
+                    throw new \Exception("SKIPPED");
                 }
 
                 $newBaseName = $this->getNewBaseName($oldName);
                 if ($newBaseName . '.' . $extension == $oldName) {
-                    throw new Exception("LEAVE");
+                    throw new \Exception("LEAVE");
                 }
 
                 $newFinalName = $this->getNewFinalName($newBaseName, $extension);
                 if (!rename($this->path . '/' . $oldName, $this->path . '/' . $newFinalName)) {
-                    throw new Exception("ERROR: $newFinalName");
+                    throw new \Exception("ERROR: $newFinalName");
                 }
 
                 $this->log($newFinalName);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->log(null, $e->getMessage());
             }
         }
