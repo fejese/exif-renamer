@@ -13,5 +13,6 @@
         "psr-4": {
             "fejese\\ExifRenamer\\": "src/"
         }
-    }
+    },
+    "bin": ["bin/exif-rename"]
 }
