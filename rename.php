@@ -113,6 +113,11 @@ class Renamer
     }
 }
 
-$r = new Renamer();
-$r->rename();
+if (isset($argv) && is_array($argv) && !empty($argv[0])) {
+    if (realpath(__FILE__) === realpath($argv[0])) {
+        $path = empty($argv[1]) ? '.' : $argv[1];
+        $r = new Renamer($path);
+        $r->rename();
+    }
+}
 
