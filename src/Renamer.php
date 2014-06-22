@@ -2,8 +2,8 @@
 
 namespace fejese\ExifRenamer;
 
-use Logger\LoggerInterface;
-use Logger\DefaultLogger;
+use fejese\ExifRenamer\Logger\LoggerInterface;
+use fejese\ExifRenamer\Logger\DefaultLogger;
 
 class Renamer
 {
