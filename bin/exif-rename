@@ -24,6 +24,6 @@ if (!$found) {
 }
 
 $path = empty($argv[1]) ? '.' : $argv[1];
-$r = new Renamer($path);
+$r = new fejese\ExifRenamer\Renamer($path);
 $r->rename();
 
