@@ -110,8 +110,9 @@ class DefaultLogger implements LoggerInterface
 
 class Renamer
 {
-    private $logfileBaseName = 'rename.log';
-
+    /**
+     * @var string[]
+     */
     private $extensions = array(
         'jpg',
         'jpeg',
@@ -120,22 +121,15 @@ class Renamer
         'avi'
     );
 
-    private $loghandler;
-    private $path;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
-    private function log($oldname = null, $info = null)
-    {
-        ob_start();
-        if ($oldname != null) {
-            echo "\n$oldname -> ";
-        }
-        if ($info != null) {
-            echo "$info ";
-        }
-        $out = ob_get_clean();
-        fwrite($this->loghandler, $out);
-        echo $out;
-    }
+    /**
+     * @var string
+     */
+    private $path;
 
     private function getNewBaseName ($entry)
     {
@@ -171,55 +165,76 @@ class Renamer
     {
         $filesToRename = scandir($this->path);
         foreach ($filesToRename as $oldName) {
-            $this->log($oldName);
+            $this->getLogger()->log($oldName . ' ');
 
             $extension = strtolower(pathinfo($oldName, PATHINFO_EXTENSION));
 
-            try {
-                if (!in_array($extension, $this->extensions)) {
-                    throw new \Exception("SKIPPED");
-                }
-
-                $newBaseName = $this->getNewBaseName($oldName);
-                if ($newBaseName . '.' . $extension == $oldName) {
-                    throw new \Exception("LEAVE");
-                }
-
-                $newFinalName = $this->getNewFinalName($newBaseName, $extension);
-                if (!rename($this->path . '/' . $oldName, $this->path . '/' . $newFinalName)) {
-                    throw new \Exception("ERROR: $newFinalName");
-                }
-
-                $this->log($newFinalName);
-            } catch (\Exception $e) {
-                $this->log(null, $e->getMessage());
+            if (!in_array($extension, $this->extensions)) {
+                $this->getLogger()->logLine("SKIPPED");
+                continue;
             }
+
+            $newBaseName = $this->getNewBaseName($oldName);
+            if ($newBaseName . '.' . $extension == $oldName) {
+                $this->getLogger()->logLine("LEAVE");
+                continue;
+            }
+
+            $newFinalName = $this->getNewFinalName($newBaseName, $extension);
+            if (!rename($this->path . '/' . $oldName, $this->path . '/' . $newFinalName)) {
+                $this->getLogger()->logLine("ERROR: $newFinalName");
+                continue;
+            }
+
+            $this->getLogger()->logLine($newFinalName);
         }
     }
 
+    /**
+     * Constructor setting the working path
+     *
+     * @param string $path
+     */
     public function __construct($path = '.')
     {
-        date_default_timezone_set('Europe/London');
         $this->path = $path;
-        $logfile = sprintf(
-            '%s/%s_%s.log',
-            $this->path,
-            $this->logfileBaseName,
-            date('ymdHis')
-        );
-        $this->loghandler = fopen($logfile, 'w');
     }
 
-    public function __destruct()
+    /**
+     * Sets the logger instance
+     *
+     * @param LoggerInterface $logger
+     * @return self
+     */
+    public function setLogger(LoggerInterface $logger)
     {
-        if ($this->loghandler !== null) {
-            fclose($this->loghandler);
+        $this->logger = $logger;
+        return $this;
+    }
+
+    /**
+     * Returns the logger instance and initialises it if it is not set
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        if (is_null($this->logger)) {
+            $logfile = sprintf(
+                '%s/rename_%s.log',
+                $this->path,
+                date('ymdHis')
+            );
+            $this->logger = new DefaultLogger($logfile);
         }
+
+        return $this->logger;
     }
 }
 
 if (isset($argv) && is_array($argv) && !empty($argv[0])) {
     if (realpath(__FILE__) === realpath($argv[0])) {
+        date_default_timezone_set('Europe/London');
         $path = empty($argv[1]) ? '.' : $argv[1];
         $r = new Renamer($path);
         $r->rename();
