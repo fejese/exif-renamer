@@ -1,7 +1,6 @@
-#!/usr/bin/env php
 <?php
 
-namespace fejese\ExifRename;
+namespace fejese\ExifRenamer;
 
 use Logger\LoggerInterface;
 use Logger\DefaultLogger;

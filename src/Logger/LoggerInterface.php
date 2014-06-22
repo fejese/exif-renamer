@@ -1,6 +1,6 @@
 <?php
 
-namespace fejese\ExifRename\Logger;
+namespace fejese\ExifRenamer\Logger;
 
 interface LoggerInterface
 {
