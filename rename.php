@@ -82,6 +82,7 @@ class DefaultLogger implements LoggerInterface
         }
 
         fwrite($fileHandler, $message);
+        echo $message;
 
         return $this;
     }
