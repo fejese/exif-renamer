@@ -1,0 +1,17 @@
+{
+    "name": "fejese/exif-renamer",
+    "description": "Batch date based image renamer",
+    "keywords": ["image", "exif"],
+    "license": "LGPL-3.0",
+    "authors": [
+        {
+            "name": "Endre Fejes",
+            "email": "fejese@fejese.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "fejese\\ExifRename\\": "src/"
+        }
+    }
+}
