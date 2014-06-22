@@ -7,7 +7,7 @@ $autoloaders = array(
 );
 
 $found = false;
-foreach ($autoloaders as $autloader) {
+foreach ($autoloaders as $autoloader) {
     if (file_exists($autoloader)) {
         require_once($autoloader);
         $found = true;
