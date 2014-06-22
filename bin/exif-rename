@@ -9,7 +9,7 @@ $autoloaders = array(
 $found = false;
 foreach ($autoloaders as $autloader) {
     if (file_exists($autoloader)) {
-        require_once($file);
+        require_once($autoloader);
         $found = true;
         break;
     }
