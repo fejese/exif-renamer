@@ -54,6 +54,38 @@ class DefaultLoggerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @dataProvider messageProvider
+     */
+    public function testLogLineWritesToFileNameGiven(array $messages)
+    {
+        ob_start();
+        foreach ($messages as $message) {
+            $this->logger->logLine($message);
+        }
+        ob_end_clean();
+        $this->assertEquals(
+            implode("\n", $messages) . "\n",
+            file_get_contents($this->tmpFile)
+        );
+    }
+
+    /**
+     * @dataProvider messageProvider
+     */
+    public function testLogLineWritesToStandardOut(array $messages)
+    {
+        ob_start();
+        foreach ($messages as $message) {
+            $this->logger->logLine($message);
+        }
+        $output = ob_get_clean();
+        $this->assertEquals(
+            implode("\n", $messages) . "\n",
+            $output
+        );
+    }
+
     public function tearDown()
     {
         if ($this->tmpFile) {
