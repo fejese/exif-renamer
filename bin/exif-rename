@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '../vendor/autoload.php';
+
+$path = empty($argv[1]) ? '.' : $argv[1];
+$r = new Renamer($path);
+$r->rename();
+
