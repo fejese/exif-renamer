@@ -116,13 +116,16 @@ class Renamer
             }
 
             $newBaseName = $this->getNewBaseName($oldName);
-            if ($newBaseName . '.' . $extension == $oldName) {
+            $newName = sprintf('%s.%s', $newBaseName, $extension);
+            if ($newName == $oldName) {
                 $this->getLogger()->logLine('LEAVE');
                 continue;
             }
 
             $newFinalName = $this->getNewFinalName($newBaseName, $extension);
-            if (!rename($this->path . '/' . $oldName, $this->path . '/' . $newFinalName)) {
+            $oldPath = sprintf('%s/%s', $this->path, $oldName);
+            $newPath = sprintf('%s/%s', $this->path, $newFinalName);
+            if (!rename($oldPath, $newPath)) {
                 $this->getLogger()->logLine(sprintf('ERROR: %s', $newFinalName));
                 continue;
             }
