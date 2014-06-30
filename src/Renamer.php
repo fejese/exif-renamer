@@ -46,6 +46,13 @@ class Renamer
         return $newBaseName;
     }
 
+    /**
+     * Returns the final new name for the original base name
+     *
+     * @param string $baseName
+     * @param string $ext
+     * @return string
+     */
     private function getNewFinalName($baseName, $ext)
     {
         $i=0;
@@ -58,7 +65,10 @@ class Renamer
         return $newFinalName;
     }
 
-    public function rename ()
+    /**
+     * Runs the renaming process
+     */
+    public function rename()
     {
         $filesToRename = scandir($this->path);
         foreach ($filesToRename as $oldName) {
