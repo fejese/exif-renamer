@@ -28,18 +28,52 @@ class Renamer
      */
     private $path;
 
-    private function getNewBaseName ($entry)
+    /**
+     * @var string
+     */
+    private $format = 'Ymd_His';
+
+    /**
+     * Returns the format string
+     *
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->format;
+    }
+
+    /**
+     * Sets the format string
+     *
+     * @param string $format
+     * @return self
+     */
+    public function getFormat($format)
+    {
+        $this->format = $format;
+        return $this;
+    }
+
+    /**
+     * Returns the new base name for a given entry
+     *
+     * @param string $entry
+     * @return string
+     */
+    private function getNewBaseName($entry)
     {
         $exifdata = @exif_read_data($this->path . '/' . $entry);
         if (!empty($exifdata['DateTimeOriginal'])) {
-            $date = preg_replace(
-                '/(20\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)/',
-                '$1$2$3_$4$5$6',
+            $dateStr = preg_replace(
+                '/((?:20|19)\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)/',
+                '$1-$2-$3 $4:$5:$6',
                 $exifdata['DateTimeOriginal']
             );
-            $newBaseName = $date;
+            $date = new \DateTime($dateStr);
+            $newBaseName = $this->getFormat();
         } else {
-            $date = date('Ymd_His', filemtime($this->path . '/' . $entry));
+            $date = date($this->getFormat(), filemtime($this->path . '/' . $entry));
             $newBaseName = $date . "_M";
         }
 
