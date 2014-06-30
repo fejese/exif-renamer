@@ -56,6 +56,29 @@ class Renamer
     }
 
     /**
+     * Returns the exif date if possible false otherwise
+     *
+     * @param string $path
+     * @return \DateTime|false
+     */
+    private function getExifDate($path)
+    {
+        $exifdata = @exif_read_data($path);
+        if (empty($exifdata['DateTimeOriginal'])) {
+            return false;
+        }
+
+        $dateStr = preg_replace(
+            '/((?:20|19)\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)/',
+            '$1-$2-$3 $4:$5:$6',
+            $exifdata['DateTimeOriginal']
+        );
+        $date = new \DateTime($dateStr);
+
+        return $date;
+    }
+
+    /**
      * Returns the new base name for a given entry
      *
      * @param string $entry
@@ -63,17 +86,12 @@ class Renamer
      */
     private function getNewBaseName($entry)
     {
-        $exifdata = @exif_read_data($this->path . '/' . $entry);
-        if (!empty($exifdata['DateTimeOriginal'])) {
-            $dateStr = preg_replace(
-                '/((?:20|19)\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)\D*(\d\d)/',
-                '$1-$2-$3 $4:$5:$6',
-                $exifdata['DateTimeOriginal']
-            );
-            $date = new \DateTime($dateStr);
-            $newBaseName = $date->format($this->getFormat());
+        $path = sprintf('%s/%s', $this->path, $entry);
+        $exifDate = $this->getExifDate($path);
+        if ($exifDate !== false) {
+            $newBaseName = $exifDate->format($this->getFormat());
         } else {
-            $date = date($this->getFormat(), filemtime($this->path . '/' . $entry));
+            $date = date($this->getFormat(), filemtime($path));
             $newBaseName = $date . '_M';
         }
 
