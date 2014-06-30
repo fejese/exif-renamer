@@ -71,10 +71,10 @@ class Renamer
                 $exifdata['DateTimeOriginal']
             );
             $date = new \DateTime($dateStr);
-            $newBaseName = $this->getFormat();
+            $newBaseName = $date->format($this->getFormat());
         } else {
             $date = date($this->getFormat(), filemtime($this->path . '/' . $entry));
-            $newBaseName = $date . "_M";
+            $newBaseName = $date . '_M';
         }
 
         return $newBaseName;
@@ -89,10 +89,10 @@ class Renamer
      */
     private function getNewFinalName($baseName, $ext)
     {
-        $i=0;
-        $newFinalName = $baseName . '.' . $ext;
+        $i = 0;
+        $newFinalName = sprintf('%s.%s', $baseName, $ext);
         while (is_file($this->path . '/' . $newFinalName)) {
-            $newFinalName = $baseName . "_$i." . $ext;
+            $newFinalName = sprintf('%s_%d.%s', $baseName, $i, $ext);
             $i++;
         }
 
@@ -111,19 +111,19 @@ class Renamer
             $extension = strtolower(pathinfo($oldName, PATHINFO_EXTENSION));
 
             if (!in_array($extension, $this->extensions)) {
-                $this->getLogger()->logLine("SKIPPED");
+                $this->getLogger()->logLine('SKIPPED');
                 continue;
             }
 
             $newBaseName = $this->getNewBaseName($oldName);
             if ($newBaseName . '.' . $extension == $oldName) {
-                $this->getLogger()->logLine("LEAVE");
+                $this->getLogger()->logLine('LEAVE');
                 continue;
             }
 
             $newFinalName = $this->getNewFinalName($newBaseName, $extension);
             if (!rename($this->path . '/' . $oldName, $this->path . '/' . $newFinalName)) {
-                $this->getLogger()->logLine("ERROR: $newFinalName");
+                $this->getLogger()->logLine(sprintf('ERROR: %s', $newFinalName));
                 continue;
             }
 
