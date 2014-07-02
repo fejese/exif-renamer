@@ -49,7 +49,7 @@ class Renamer
      * @param string $format
      * @return self
      */
-    public function getFormat($format)
+    public function setFormat($format)
     {
         $this->format = $format;
         return $this;
