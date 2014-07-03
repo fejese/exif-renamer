@@ -12,7 +12,7 @@
     "autoload": {
         "psr-4": {
             "fejese\\ExifRenamer\\": "src/",
-            "fejese\\ExifRenamer\\Tests\\": "tests/"
+            "fejese\\ExifRenamer\\Tests\\": "tests/src/"
         }
     },
     "minimum-stability": "stable",
