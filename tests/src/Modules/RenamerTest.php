@@ -13,9 +13,11 @@ class RenamerTest extends \PHPUnit_Framework_TestCase
         $this->renamer = new Renamer('.');
     }
 
-    public function testCanSetFormat()
+    /**
+     * @dataProvider fejese\ExifRenamer\Tests\DataProvider\Format::getFormats()
+     */
+    public function testCanSetFormat($format)
     {
-        $format = 'ymdhis';
         $this->renamer->setFormat($format);
         $this->assertEquals(
             $format,
