@@ -1,6 +1,6 @@
 <?php
 
-namespace fejese\ExifRenamer\Tests\Logger;
+namespace fejese\ExifRenamer\Tests\Modules\Logger;
 
 use fejese\ExifRenamer\Logger\DefaultLogger;
 
