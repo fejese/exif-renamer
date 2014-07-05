@@ -60,6 +60,25 @@ class RenamerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($md5, md5_file($newFile));
     }
 
+    public function testImagesWithExifRenamedToExifDate()
+    {
+        $file = $this->testFilesTmp . '/has_exif_date_1404597355.jpg';
+        $mtime = '1404597355';
+        $md5 = md5_file($file);
+
+        $newFile = sprintf(
+            '%s/%d.jpg',
+            $this->testFilesTmp,
+            $mtime
+        );
+
+        $this->renamer->setFormat('U');
+        $this->renamer->rename();
+
+        $this->assertTrue(file_exists($newFile));
+        $this->assertEquals($md5, md5_file($newFile));
+    }
+
     public function tearDown()
     {
         $this->testFileManager->cleanupTemp();
