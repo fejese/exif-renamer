@@ -23,6 +23,10 @@ class RenamerTest extends \PHPUnit_Framework_TestCase
         $this->testFileManager->copyToTemp();
 
         $this->renamer = new Renamer($this->testFilesTmp);
+        $logger = $this->getMock(
+            'fejese\ExifRenamer\Logger\LoggerInterface'
+        );
+        $this->renamer->setLogger($logger);
     }
 
     /**
@@ -37,8 +41,6 @@ class RenamerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     */
     public function testImagesWithoutExifRenamedToMTime()
     {
         $file = $this->testFilesTmp . '/noexif.png';
