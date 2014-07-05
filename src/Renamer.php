@@ -15,6 +15,7 @@ class Renamer
         'jpeg',
         'tif',
         'tiff',
+        'png',
         'avi'
     );
 
