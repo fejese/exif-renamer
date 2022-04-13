@@ -10,11 +10,8 @@ foreach ($autoloaders as $autoloader) {
     if (file_exists($autoloader)) {
         require_once($autoloader);
 
-        $path = empty($argv[1]) ? '.' : $argv[1];
-        $r = new fejese\ExifRenamer\Renamer($path);
-        $r->rename();
-
-        exit(0);
+        $r = new fejese\ExifRenamer\Cli();
+        exit($r->run());
     }
 }
 
